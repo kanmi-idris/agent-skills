@@ -8,6 +8,7 @@ Custom agent skills for installation via `skills.sh` / `npx skills add`.
 - `react-navigation-v8-cheat-sheet` — guidance for React Navigation v8 static config, native tabs, deep linking, auth flows, TypeScript, theming, and migration tips.
 - `lunour-naming` — strategic company and product naming guidance with brand discovery, naming categories, and domain/trademark-aware evaluation.
 - `before-you-memo` — React re-render optimization guidance focused on moving state down and lifting static content before adding memoization.
+- `icon-design` — UI icon selection, icon critique, icon system design, and production-ready SVG guidance.
 
 ## Install
 
@@ -16,4 +17,5 @@ npx skills add kanmi-idris/agent-skills --skill react-native-hidden-styles
 npx skills add kanmi-idris/agent-skills --skill react-navigation-v8-cheat-sheet
 npx skills add kanmi-idris/agent-skills --skill lunour-naming
 npx skills add kanmi-idris/agent-skills --skill before-you-memo
+npx skills add kanmi-idris/agent-skills --skill icon-design
 ```
