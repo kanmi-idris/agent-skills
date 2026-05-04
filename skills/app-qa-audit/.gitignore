@@ -1,0 +1,8 @@
+# Local QA artifacts generated while using the skill
+output/
+reports/
+artifacts/
+reverse_engineering/
+.maestro/
+*.apk
+*.aab
