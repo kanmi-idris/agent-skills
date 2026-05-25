@@ -1,0 +1,4 @@
+interface:
+  display_name: "QA Readiness"
+  short_description: "Maintain QA readiness reports"
+  default_prompt: "Use $qa-readiness to update the NaptiQcare QA readiness report from tracker, Postman, reverse-engineering, and Netlify evidence."
