@@ -36,6 +36,14 @@ End-to-end QA guidance for Android APKs, mobile builds, and live webapps, with o
 npx skills add kanmi-idris/agent-skills --skill app-qa-audit
 ```
 
+### [make-interfaces-feel-better](https://skills.sh/jakubkrehel/make-interfaces-feel-better)
+
+Design engineering principles for making interfaces feel polished. Use when building UI components, reviewing frontend code, implementing animations, hover states, shadows, borders, typography, micro-interactions, enter/exit animations, or any visual detail work.
+
+```bash
+npx skills add jakubkrehel/make-interfaces-feel-better
+```
+
 ### [qa-readiness](skills/qa-readiness/SKILL.md)
 
 Maintain the NaptiQcare QA readiness reporting pipeline, including tracker sync, Postman runner backlog, generated HTML reports, verification scripts, and Netlify deployment.
