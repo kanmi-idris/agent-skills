@@ -1,0 +1,4 @@
+interface:
+  display_name: "QA Email + SMS OTP"
+  short_description: "Local Mailpit and Android OTP QA"
+  default_prompt: "Use $qa-email-sms-otp to set up and validate local email and Android SMS OTP handling."

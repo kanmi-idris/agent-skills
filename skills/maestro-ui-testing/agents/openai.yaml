@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maestro UI Testing"
+  short_description: "Write and run Maestro mobile/web flows"
+  default_prompt: "Use $maestro-ui-testing to create a reliable Maestro flow for my app."

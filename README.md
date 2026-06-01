@@ -52,6 +52,22 @@ Maintain the NaptiQcare QA readiness reporting pipeline, including tracker sync,
 npx skills add kanmi-idris/agent-skills --skill qa-readiness
 ```
 
+### [qa-email-sms-otp](skills/qa-email-sms-otp/SKILL.md)
+
+Local QA workflow for email OTP and Android SMS OTP handling with Mailpit, SMS Gateway for Android, adb, and emulator or physical-device testing.
+
+```bash
+npx skills add kanmi-idris/agent-skills --skill qa-email-sms-otp
+```
+
+### [maestro-ui-testing](skills/maestro-ui-testing/SKILL.md)
+
+Build, debug, and run Maestro UI automation for mobile and web apps, including YAML flows, local device runs, CI or cloud execution, OTP flows, permissions, reports, and recordings.
+
+```bash
+npx skills add kanmi-idris/agent-skills --skill maestro-ui-testing
+```
+
 ### [zero-tech-debt](skills/zero-tech-debt/SKILL.md)
 
 Refactor guidance for rebuilding a change from the intended final UX and architecture, removing compatibility cruft and accidental complexity.
