@@ -29,6 +29,7 @@ Use this skill to take a project from no Maestro coverage to a working local or 
    - Use visible text first when it expresses the UX contract.
    - Use `id` or accessibility identifiers for icons, repeated controls, localization, or unstable copy.
    - Use assertions as waits before reaching for explicit wait commands.
+   - Assert the intended product outcome, not just that taps completed.
    - Use `scrollUntilVisible`, `runFlow`, `when`, and `repeat` instead of brittle coordinate-heavy scripts.
    - Use JavaScript only for dynamic data, API setup, custom state, or logic that YAML cannot express cleanly.
 6. Run locally and debug:
@@ -74,6 +75,60 @@ tags:
 - launchApp
 - assertVisible: "Home"
 - tapOn: "Sign in"
+```
+
+## Defect Retest Guardrails
+
+Use these guardrails when testing known defects, flaky auth flows, OTP flows, toast-heavy apps, or user-reported regressions:
+
+- Test one defect row per flow where practical: one setup, one action, one expected outcome, one evidence set.
+- Treat a Maestro flow as incomplete until it asserts the defect-specific postcondition, such as Dashboard visible, OTP screen visible, account chooser visible, saved data persisted after leaving and returning, or a specific error/toast visible.
+- Capture transient feedback immediately after submit actions. For toast-heavy apps, take evidence at roughly immediate, 1s, 3s, and 8-10s, and also collect focused logcat around the action.
+- Reset logcat before each defect action, then save a short post-action logcat so parser errors, network failures, and backend messages are attributable to that test.
+- Preserve authenticated state until all authenticated-only defects are tested. Run logout, account-clearing, password-change, external-browser, and destructive state tests late unless they are the target scenario.
+- Use `launchApp: { clearState: true }` only for fresh onboarding/auth tests. Avoid clearing state for session restore, minimize/reopen, notification read state, referral routing, saved-data persistence, or profile update scenarios.
+- Never treat placeholder text as entered user data. Focus the field, clear it explicitly when needed, type the value, and use screenshot or hierarchy evidence to verify the entered state.
+- Prefer selectors over coordinates. If coordinates are necessary, capture a screenshot/hierarchy near the tap and document why a selector was not reliable.
+- For flaky JSON/network/auth errors, retry the same action twice more with the same setup before classifying the issue. Keep each attempt's screenshot and logcat separate.
+- For real carrier/backend OTP flows, do not claim emulator SMS simulation proves end-to-end verification. Use backend test numbers, Mailpit/SMS Gateway paths, or a physical SIM; otherwise mark the OTP validation blocked or partially verified.
+
+Outcome-focused example:
+
+```yaml
+appId: ${APP_ID}
+name: Auth - login reaches dashboard
+---
+- launchApp
+- assertVisible: "Login"
+- tapOn:
+    id: "phone_input"
+- inputText: ${PHONE}
+- tapOn:
+    id: "password_input"
+- inputText: ${PASSWORD}
+- tapOn: "Login"
+- assertVisible: "Dashboard"
+- takeScreenshot: "auth-login-dashboard"
+```
+
+Negative/toast-heavy example:
+
+```yaml
+appId: ${APP_ID}
+name: Forgot password - invalid phone fails closed
+---
+- launchApp
+- assertVisible: "Forgot Password"
+- tapOn:
+    id: "phone_input"
+- inputText: ${PHONE}
+- tapOn: "Request OTP"
+- takeScreenshot: "forgot-submit-immediate"
+- waitForAnimationToEnd:
+    timeout: 1000
+- takeScreenshot: "forgot-submit-after-1s"
+- assertVisible:
+    text: "Profile is not registered|Network request failed|Phone verification"
 ```
 
 ## Reference Map
