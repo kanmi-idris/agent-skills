@@ -83,14 +83,32 @@ Use these guardrails when testing known defects, flaky auth flows, OTP flows, to
 
 - Test one defect row per flow where practical: one setup, one action, one expected outcome, one evidence set.
 - Treat a Maestro flow as incomplete until it asserts the defect-specific postcondition, such as Dashboard visible, OTP screen visible, account chooser visible, saved data persisted after leaving and returning, or a specific error/toast visible.
-- Capture transient feedback immediately after submit actions. For toast-heavy apps, take evidence at roughly immediate, 1s, 3s, and 8-10s, and also collect focused logcat around the action.
+- Capture transient feedback immediately after submit actions. For toast-heavy apps, take evidence at roughly immediate, 1s, 3-4s, and 8-10s, and also collect focused logcat around the action.
 - Reset logcat before each defect action, then save a short post-action logcat so parser errors, network failures, and backend messages are attributable to that test.
 - Preserve authenticated state until all authenticated-only defects are tested. Run logout, account-clearing, password-change, external-browser, and destructive state tests late unless they are the target scenario.
 - Use `launchApp: { clearState: true }` only for fresh onboarding/auth tests. Avoid clearing state for session restore, minimize/reopen, notification read state, referral routing, saved-data persistence, or profile update scenarios.
-- Never treat placeholder text as entered user data. Focus the field, clear it explicitly when needed, type the value, and use screenshot or hierarchy evidence to verify the entered state.
+- Never treat placeholder text, example values, or previously saved account data as entered user data. Focus the field, clear it explicitly when needed, type a fresh marker/value, and use screenshot or hierarchy evidence to verify the entered state.
+- For persistence defects, do not stop after seeing data on the same screen. Save or perform the closest available commit action, leave the screen, return through the real navigation path, and verify the fresh marker persisted or was rejected.
 - Prefer selectors over coordinates. If coordinates are necessary, capture a screenshot/hierarchy near the tap and document why a selector was not reliable.
 - For flaky JSON/network/auth errors, retry the same action twice more with the same setup before classifying the issue. Keep each attempt's screenshot and logcat separate.
 - For real carrier/backend OTP flows, do not claim emulator SMS simulation proves end-to-end verification. Use backend test numbers, Mailpit/SMS Gateway paths, or a physical SIM; otherwise mark the OTP validation blocked or partially verified.
+
+## Field-Tested Retest Lessons
+
+Apply these lessons when another agent needs to rerun a defect log or verify fixes:
+
+- Treat every row as a fresh outcome-based retest. A tap completing, a screen opening, or old bad data being visible is not enough evidence.
+- Name fresh test data so it can be distinguished from old account state, such as `RERUNBAD...`, timestamps, or scenario-specific markers.
+- Preserve session state while testing authenticated surfaces. Run force-stop, logout, external link/deep-link, account-clearing, and auth recovery flows after logged-in feature defects.
+- Set up device prerequisites before testing dependent features: permissions, location services, emulator geo, locale, network, push state, and test account data.
+- For location-dependent lists, compare categories after prerequisites are enabled and wait long enough for lazy loading. A loading state may hide the real wrong-result defect.
+- For phone, OTP, and auth normalization tests, explicitly type the exact value under test and capture the entered field before submit. Test local/national and normalized formats only after proving which value was entered.
+- When auth or network failures appear, separate app failures from emulator/environment failures. Check raw IP reachability, DNS, focused logcat, and repeat attempts before classifying.
+- Do not mark OTP delivery verified from emulator-injected SMS unless the app's backend path is actually exercised. Without a backend test number, SMS gateway, Mailpit, or physical SIM, mark real OTP delivery blocked or partial.
+- Isolate AI/chat tests when possible. A stuck generation, retry state, selected tool chip, or unfinished stream can contaminate later chat defects.
+- Empty states are blockers, not passes. If notifications, history, inboxes, or push-triggered screens have no data, log the missing precondition instead of closing the defect.
+- Push notification defects need a backend or controlled trigger. Opening the notification shade without a push event only proves the trigger was unavailable.
+- Keep evidence per defect: screenshots at meaningful waits, hierarchy when selectors/state are ambiguous, and a short logcat captured immediately around the action.
 
 Outcome-focused example:
 
