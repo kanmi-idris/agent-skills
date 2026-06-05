@@ -76,6 +76,14 @@ Refactor guidance for rebuilding a change from the intended final UX and archite
 npx skills add kanmi-idris/agent-skills --skill zero-tech-debt
 ```
 
+### [virtuous-laziness](skills/virtuous-laziness/SKILL.md)
+
+Engineering judgment guidance for coding agents that optimizes for simplicity, maintainability, useful abstractions, and avoiding generated bloat.
+
+```bash
+npx skills add kanmi-idris/agent-skills --skill virtuous-laziness
+```
+
 ### [lunour-naming](skills/lunour-naming/SKILL.md)
 
 Strategic company and product naming guidance with brand discovery, naming categories, and domain/trademark-aware evaluation.
