@@ -76,6 +76,14 @@ Refactor guidance for rebuilding a change from the intended final UX and archite
 npx skills add kanmi-idris/agent-skills --skill zero-tech-debt
 ```
 
+### [elons-algorithm](skills/elons-algorithm/SKILL.md)
+
+System improvement guidance for questioning requirements, deleting unnecessary work, simplifying, accelerating cycle time, and automating last.
+
+```bash
+npx skills add kanmi-idris/agent-skills --skill elons-algorithm
+```
+
 ### [virtuous-laziness](skills/virtuous-laziness/SKILL.md)
 
 Engineering judgment guidance for coding agents that optimizes for simplicity, maintainability, useful abstractions, and avoiding generated bloat.
