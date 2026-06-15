@@ -115,3 +115,11 @@ UI icon selection, icon critique, icon system design, and production-ready SVG g
 ```bash
 npx skills add kanmi-idris/agent-skills --skill icon-design
 ```
+
+### [boneyard-js](skills/boneyard-js/SKILL.md)
+
+Pixel-perfect skeleton loading guidance for `boneyard-js`, including `Skeleton` usage, build capture workflow, fixtures, registry import, framework integrations, and config/runtime tuning.
+
+```bash
+npx skills add kanmi-idris/agent-skills --skill boneyard-js
+```
