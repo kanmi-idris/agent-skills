@@ -123,3 +123,11 @@ Pixel-perfect skeleton loading guidance for `boneyard-js`, including `Skeleton` 
 ```bash
 npx skills add kanmi-idris/agent-skills --skill boneyard-js
 ```
+
+### [ultra-prompt](skills/ultra-prompt/SKILL.md)
+
+Expand rough user prompts into precise, evidence-grounded coding-agent prompts after auditing the target repository.
+
+```bash
+npx skills add kanmi-idris/agent-skills --skill ultra-prompt
+```
