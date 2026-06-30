@@ -69,6 +69,7 @@ bash scripts/show-navigation-summary.sh
    - Prefer module augmentation over the old `RootParamList` pattern.
    - Prefer static config examples first.
    - Use typed hooks like `useNavigation("Profile")` and `useRoute("Profile")` for static setups.
+   - Typed hooks in v8 include runtime validation — `useRoute("Profile")` verifies the hook is inside the Profile screen and returns correct types without casts.
    - Mention casting patterns only for dynamic setups when unavoidable.
 
 9. **Theming**
@@ -78,8 +79,14 @@ bash scripts/show-navigation-summary.sh
    - Use `useTheme()` inside components.
 
 10. **Migration and requirements**
-   - Include key v7 → v8 API changes.
-   - Call out minimum versions and the New Architecture requirement.
+    - Include key v7 → v8 API changes.
+    - Call out minimum versions and the New Architecture requirement.
+
+11. **Typed hooks (runtime validation)**
+    - `useRoute("ScreenName")` validates runtime position and returns correct param types.
+    - `useNavigation("ScreenName")` provides navigator-specific methods and events.
+    - `useNavigationState("ScreenName")` returns typed navigator state.
+    - No separate setup needed — just configure types per the official docs.
 
 ## Working Rules
 
@@ -211,10 +218,82 @@ const RootStack = createNativeStackNavigator({
 })
 ```
 
-### Typed hooks in static config
+### `useRoute(name)` — auto-narrowing params
 ```tsx
-const navigation = useNavigation('Profile')
+const route = useRoute()
+
+if (route.name === 'Profile') {
+  // ✅ route.params is typed for Profile screen — no casts needed
+  console.log(route.params.userId)
+}
+```
+
+When you know the enclosing screen, pass its name for runtime validation:
+```tsx
+// ✅ Validates at runtime that we're inside the Profile screen
 const route = useRoute('Profile')
+
+// ✅ route.params is exactly Profile's param type
+console.log(route.params.userId)
+```
+
+`useRoute("Profile")` also resolves route objects from parent navigators — no need for manual context wiring.
+
+### `useNavigation(name)` — navigator-aware types
+```tsx
+// In a bottom-tab screen called "Latest" nested under a drawer:
+const navigation = useNavigation('Latest')
+
+// ✅ Knows about tab-specific events
+navigation.addListener('tabPress', () => { ... })
+
+// ✅ Has nested navigator methods (e.g. openDrawer from parent drawer)
+navigation.openDrawer()
+```
+
+Without a screen name, `useNavigation()` returns the root navigator's type — still correct for `navigate`, but `setOptions` and `addListener` lose navigator-specific types.
+
+### `useNavigationState(name)` — typed state
+```tsx
+const previousRouteName = useNavigationState(
+  'Latest',
+  (state) => state.index > 0 ? state.routes[state.index - 1].name : null
+)
+// ✅ state type matches the "Latest" tab navigator
+```
+
+Without a name, state is typed as generic navigation state.
+
+### CompositeNavigationProp removed
+In v7, accessing nested-navigator-specific methods required manual type composition:
+```tsx
+// ❌ v7 boilerplate — no longer needed
+type ProfileScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabParamList, 'Profile'>,
+  CompositeNavigationProp<
+    StackNavigationProp<StackParamList, 'Account'>,
+    DrawerNavigationProp<DrawerParamList, 'Home'>
+  >
+>
+```
+
+In v8, `useNavigation('Profile')` returns the correct type automatically — all that boilerplate is gone.
+
+### Dynamic API: NavigatorScreenParams change
+For the Dynamic API, `NavigatorScreenParams` now takes the navigator type instead of the param list:
+```tsx
+type MyTabParamList = {
+  Feed: NavigatorScreenParams<typeof FeedStack>  // ✅ v8
+  Profile: { userId: string }
+  Settings: undefined
+}
+```
+```tsx
+type MyTabParamList = {
+  Feed: NavigatorScreenParams<FeedStackParamList>  // ❌ v7 — old pattern
+  Profile: { userId: string }
+  Settings: undefined
+}
 ```
 
 ### Module augmentation
@@ -245,6 +324,7 @@ declare module '@react-navigation/core' {
 - `InteractionManager.runAfterInteractions(...)` → `navigation.addListener('transitionEnd', ...)`
 - `setParams` history behavior split into `pushParams` and `setParams`
 - `useNavigation<Type>()` → `useNavigation('ScreenName')` or cast in dynamic setups
+- `CompositeNavigationProp<A, B>` → removed, no replacement needed; `useNavigation("ScreenName")` infers nested types automatically
 
 ## Minimum Requirements
 

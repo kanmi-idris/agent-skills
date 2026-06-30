@@ -8,10 +8,10 @@
       "computedHash": "54b6e221bbe4e2d1a8461c3f9ecabe69daf891f964e9ee5e699c323daa018f2e"
     },
     "ultra-prompt": {
-      "source": "local",
-      "sourceType": "local",
+      "source": "kanmi-idris/agent-skills",
+      "sourceType": "github",
       "skillPath": "skills/ultra-prompt/SKILL.md",
-      "computedHash": "e0abdcd0c5ac1b2b4c4a918ec9843cce60497983058a5d7d3d349d9d0301edf6"
+      "computedHash": "c4b445a02d8711a7d45f60520ee08b232cb5663bccb40b146dc8c65670c38c5a"
     }
   }
 }
